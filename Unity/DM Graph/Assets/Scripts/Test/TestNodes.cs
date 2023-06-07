@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 using dm_graph.nodes;
 using dm_graph.nodes.components;
 
-public class TestNodeComponents
+public class TestNodes
 {
     [Test]
     public void TestBaseNode()

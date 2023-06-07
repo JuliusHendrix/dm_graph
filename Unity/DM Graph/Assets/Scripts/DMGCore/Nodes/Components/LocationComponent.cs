@@ -18,7 +18,7 @@ namespace dm_graph.nodes.components
 
         public Tuple<double, double> GetPosition()
         {
-            return Tuple.Create<double, double>(xPosition, yPosition);
+            return Tuple.Create(xPosition, yPosition);
         }
     }
 } // namespace dm_graph
