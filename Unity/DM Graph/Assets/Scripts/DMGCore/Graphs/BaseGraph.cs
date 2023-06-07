@@ -30,10 +30,10 @@ namespace dm_graph.graphs
         }
 
         public abstract bool AddNode(BaseNode node);
-        public abstract bool RemoveNode(BaseNode node);
+        public abstract void RemoveNode(BaseNode node);
         public abstract edgeType AddEdge(BaseNode sender, BaseNode receiver);
-        public abstract bool RemoveEdge(BaseEdge edge);
-        public abstract bool RemoveEdge(BaseNode sender, BaseNode receiver);
+        public abstract void RemoveEdge(BaseEdge edge);
+        public abstract void RemoveEdge(BaseNode sender, BaseNode receiver);
     }
 
 } // namespace dm_graph.graphs
