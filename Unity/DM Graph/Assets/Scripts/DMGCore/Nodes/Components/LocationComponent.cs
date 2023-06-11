@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
 namespace dm_graph.nodes.components
 {
@@ -16,9 +15,9 @@ namespace dm_graph.nodes.components
             yPosition = y;
         }
 
-        public Tuple<double, double> GetPosition()
+        public (double, double) GetPosition()
         {
-            return Tuple.Create(xPosition, yPosition);
+            return (xPosition, yPosition);
         }
     }
 } // namespace dm_graph

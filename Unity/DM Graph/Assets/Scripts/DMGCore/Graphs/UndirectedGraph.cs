@@ -7,7 +7,7 @@ using dm_graph.edges;
 
 namespace dm_graph.graphs
 {
-    public class UndirectedGraph<edgeType> : BaseGraph<edgeType> where edgeType : BaseEdge
+    public class UndirectedGraph : BaseGraph
     {
         public UndirectedGraph(string name) : base(name) {}
 
@@ -19,8 +19,7 @@ namespace dm_graph.graphs
             }
 
             m_Nodes.Add(node);
-
-            // TODO: update adjanecy matrix
+            m_AdjacencyMatrix.Expand();
 
             return true;
         }
@@ -32,30 +31,35 @@ namespace dm_graph.graphs
                 return;
             }
             m_Nodes.Remove(node);
-
-            // TODO: update adjanecy matrix
+            m_AdjacencyMatrix.Contract(m_Nodes.IndexOf(node));
         }
 
-        public override edgeType AddEdge(BaseNode sender, BaseNode receiver)
+        public override bool AddEdge(BaseEdge edge)
         {
+            var (sender, receiver) = edge.GetSenderReceiver();
             if (!m_Nodes.Contains(sender)) {
                 Debug.Log("RemoveNode(): sender not in graph: " + sender.GetName());
-                return null;
+                return false;
             }
 
             if (!m_Nodes.Contains(receiver)) {
                 Debug.Log("RemoveNode(): receiver not in graph: " + receiver.GetName());
-                return null;
+                return false;
             }
 
-            // check if already in adjacency matrix
-            edgeType newEdge = (edgeType)Activator.CreateInstance(typeof(edgeType), sender, receiver);
+            m_Edges.Add(edge);
+            m_AdjacencyMatrix.AddConnection(
+                m_Nodes.IndexOf(sender),
+                m_Nodes.IndexOf(receiver),
+                m_Edges.Count - 1
+            );
+            m_AdjacencyMatrix.AddConnection( 
+                m_Nodes.IndexOf(receiver),
+                m_Nodes.IndexOf(sender),
+                m_Edges.Count - 1
+            );
 
-            m_Edges.Add(newEdge);
-
-            // TODO: update adjacency matrix
-
-            return newEdge;
+            return true;
         }
 
         public override void RemoveEdge(BaseEdge edge)
@@ -65,13 +69,24 @@ namespace dm_graph.graphs
                 return;
             }
             m_Edges.Remove(edge);
-
-            // TODO: update adjacency matrix
+            m_AdjacencyMatrix.RemoveConnection(m_Edges.IndexOf(edge));
         }
 
         public override void RemoveEdge(BaseNode sender, BaseNode receiver)
         {
-            throw new NotImplementedException();
+            m_AdjacencyMatrix.RemoveConnection(m_Nodes.IndexOf(sender), m_Nodes.IndexOf(receiver));
+            m_AdjacencyMatrix.RemoveConnection(m_Nodes.IndexOf(receiver), m_Nodes.IndexOf(sender));
+        }
+
+        public override BaseEdge GetEdge(BaseNode sender, BaseNode receiver)
+        {
+            int edgeIdx = m_AdjacencyMatrix.GetConnection(m_Nodes.IndexOf(sender), m_Nodes.IndexOf(receiver));
+
+            if (edgeIdx == -1) {
+                return null;
+            }
+
+            return m_Edges[edgeIdx];
         }
     }
 } // namespace dm_graph.graphs
