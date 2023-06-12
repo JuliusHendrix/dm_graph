@@ -18,26 +18,38 @@ public class TestGraphs
 
         BaseNode sender     = new BaseNode("sender");
         BaseNode receiver   = new BaseNode("receiver");
+        BaseNode other      = new BaseNode("other");
 
         undirectedGraph.AddNode(sender);
         undirectedGraph.AddNode(receiver);
+        undirectedGraph.AddNode(other);
 
-        WeightedEdge edge = new WeightedEdge(sender, receiver);
+        WeightedEdge edge1  = new WeightedEdge(sender, receiver);
+        WeightedEdge edge2  = new WeightedEdge(other, sender);
 
-        Assert.IsTrue(undirectedGraph.AddEdge(edge));
+        Assert.IsTrue(undirectedGraph.AddEdge(edge1));
+        Assert.IsTrue(undirectedGraph.AddEdge(edge2));
 
-        BaseEdge retreivedEdge = undirectedGraph.GetEdge(sender, receiver);
-        Assert.NotNull(retreivedEdge);
+        BaseEdge retreivedEdge1 = undirectedGraph.GetEdge(sender, receiver);
+        BaseEdge retreivedEdge2 = undirectedGraph.GetEdge(other, sender);
+        Assert.NotNull(retreivedEdge1);
+        Assert.NotNull(retreivedEdge2);
 
-        var (retreivedEdgeSender, retreivedEdgeReceiver) = retreivedEdge.GetSenderReceiver();
-        Assert.AreEqual(retreivedEdgeSender, sender);
-        Assert.AreEqual(retreivedEdgeReceiver, receiver);
+        var (retreivedEdge1Sender, retreivedEdge1Receiver) = retreivedEdge1.GetSenderReceiver();
+        Assert.AreEqual(retreivedEdge1Sender, sender);
+        Assert.AreEqual(retreivedEdge1Receiver, receiver);
 
-        WeightComponent edgeWeight = retreivedEdge.GetComponent<WeightComponent>();
+        var (retreivedEdge2Sender, retreivedEdge2Receiver) = retreivedEdge2.GetSenderReceiver();
+        Assert.AreEqual(retreivedEdge2Sender, other);
+        Assert.AreEqual(retreivedEdge2Receiver, sender);
+
+        WeightComponent edgeWeight = retreivedEdge1.GetComponent<WeightComponent>();
         Assert.NotNull(edgeWeight);
 
-        undirectedGraph.RemoveEdge(edge);
-        BaseEdge removedEdge = undirectedGraph.GetEdge(sender, receiver);
+        undirectedGraph.RemoveEdge(edge1);
+        BaseEdge removedEdge    = undirectedGraph.GetEdge(sender, receiver);
+        BaseEdge remainingEdge  = undirectedGraph.GetEdge(other, sender);
         Assert.IsNull(removedEdge);
+        Assert.NotNull(remainingEdge);
     }
 }
