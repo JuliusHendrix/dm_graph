@@ -11,10 +11,14 @@ using dm_graph.visualization;
 public class TestRunner : MonoBehaviour
 {
     [SerializeField] private MapVisualizer2D m_MapVisualizer2D;
+    private Map         m_TestMap;
+    private BaseGraph   m_TestGraph;
 
     // Start is called before the first frame update
     void Start()
     {
+        CreateTestMap();
+        CreateTestGraph();
         Test();
     }
 
@@ -22,30 +26,38 @@ public class TestRunner : MonoBehaviour
     {
         Debug.Log("Test");
 
-        BaseGraph testGraph = CreateTestGraph();
-        m_MapVisualizer2D.VisualizeGraph(testGraph);
+        m_MapVisualizer2D.VisualizeGraph(m_TestGraph, m_TestMap);
     }
 
-    private BaseGraph CreateTestGraph()
+    private void CreateTestMap()
     {
-        BaseGraph graph = new UndirectedGraph("Test Undirected Graph");
+        m_TestMap = new Map("Test Map");
+    }
+
+    private void CreateTestGraph()
+    {
+        m_TestGraph = new UndirectedGraph("Test Undirected Graph");
 
         BaseNode adamNode = new ActorNode("Adam");
-        adamNode.GetComponent<LocationComponent>().SetPosition(-3.0, -3.0);
-        graph.AddNode(adamNode);
+        adamNode.GetComponent<LocationComponent>().SetPosition(
+            m_TestMap, new Vector2(-3.0f, -3.0f)
+        );
+        m_TestGraph.AddNode(adamNode);
 
         BaseNode eveNode = new ActorNode("Eve");
-        eveNode.GetComponent<LocationComponent>().SetPosition(3.0, -3.0);
-        graph.AddNode(eveNode);
+        eveNode.GetComponent<LocationComponent>().SetPosition(
+            m_TestMap, new Vector2(3.0f, -3.0f)
+        );
+        m_TestGraph.AddNode(eveNode);
 
         BaseNode paradiseNode = new LocationNode("Paradise");
-        paradiseNode.GetComponent<LocationComponent>().SetPosition(0.0, 0.0);
-        graph.AddNode(paradiseNode);
+        paradiseNode.GetComponent<LocationComponent>().SetPosition(
+            m_TestMap, new Vector2(0.0f, 0.0f)
+        );
+        m_TestGraph.AddNode(paradiseNode);
 
         BaseNode godNode = new BaseNode("God");
-        graph.AddNode(godNode);
-
-        return graph;
+        m_TestGraph.AddNode(godNode);
     }
 
     // Update is called once per frame

@@ -14,9 +14,8 @@ namespace dm_graph.visualization
         [SerializeField] private GameObject m_Node2DPrefab;
         [SerializeField] private Transform  m_NodesContainer;
         [SerializeField] private Transform  m_EdgesContainer;
-        // private List<Transform>             m_Nodes = new List<Transform>();
-        // private List<Transform>             m_Edges = new List<Transform>();
         private BaseGraph                   m_Graph;
+        private Map                         m_Map;
 
         private void VisualizeNode(BaseNode node)
         {
@@ -25,22 +24,24 @@ namespace dm_graph.visualization
                 Debug.Log("Node doesn't have a location: " + node.GetName());
                 return;
             }
+            var (isInMap, position) = location.GetPosition(m_Map);
+            if (!isInMap) {
+                Debug.Log("Node " + node.GetName() + " is not in map: " + m_Map.name);
+                return;
+            }
 
             GameObject  newNode2DObject     = Instantiate(m_Node2DPrefab);
             Node2D      newNode2d           = newNode2DObject.GetComponent<Node2D>();
             
             newNode2DObject.transform.SetParent(m_NodesContainer);
-            
-            var (x, y) = location.GetPosition();
-            newNode2DObject.transform.position = new Vector3((float)x, (float)y, (float)0.0);
-
-            // m_Nodes.Add(newNode2DObject.transform);
+            newNode2DObject.transform.position = new Vector3(position.x, position.y, (float)0.0);
 
             newNode2d.SetNode(node);
         }
 
-        public void VisualizeGraph(BaseGraph graph)
+        public void VisualizeGraph(BaseGraph graph, Map map)
         {
+            m_Map = map;
             List<BaseNode> nodes = graph.GetNodes();
             foreach (BaseNode node in nodes) {
                 VisualizeNode(node);

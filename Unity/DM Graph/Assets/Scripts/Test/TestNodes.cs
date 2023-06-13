@@ -41,6 +41,28 @@ public class TestNodes
         Assert.AreEqual(actorNodeAlignment.GetAlignment(), Alignment.CHAOTIC_EVIL);
     }
 
+    [Test]
+    public void TestLocationComponent()
+    {
+        LocationNode locationNode = new LocationNode("Test Location Node");
+        LocationComponent locationComponent = locationNode.GetComponent<LocationComponent>();
+        Assert.NotNull(locationComponent);
+
+        Map map1 = new ("Test Map 1");
+        Map map2 = new ("Test Map 2");
+
+        locationComponent.SetPosition(map1, new Vector2(0.0f, 0.0f));
+        {
+            var (isInMap, position) = locationComponent.GetPosition(map1);
+            Assert.IsTrue(isInMap);
+            Assert.AreEqual(position, new Vector2(0.0f, 0.0f));
+        }
+        {
+            var (isInMap, position) = locationComponent.GetPosition(map2);
+            Assert.IsFalse(isInMap);
+        }
+    }
+
     // // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // // `yield return null;` to skip a frame.
     // [UnityTest]
