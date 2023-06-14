@@ -50,14 +50,29 @@ public class TestRunner : MonoBehaviour
         );
         m_TestGraph.AddNode(eveNode);
 
+        WeightedEdge adamEveEdge = new WeightedEdge(adamNode, eveNode);
+        m_TestGraph.AddEdge(adamEveEdge);
+
         BaseNode paradiseNode = new LocationNode("Paradise");
         paradiseNode.GetComponent<LocationComponent>().SetPosition(
             m_TestMap, new Vector2(0.0f, 0.0f)
         );
         m_TestGraph.AddNode(paradiseNode);
 
-        BaseNode godNode = new BaseNode("God");
+        WeightedEdge paradiseAdamEdge = new WeightedEdge(paradiseNode, adamNode);
+        m_TestGraph.AddEdge(paradiseAdamEdge);
+
+        WeightedEdge paradiseEveEdge = new WeightedEdge(paradiseNode, eveNode);
+        m_TestGraph.AddEdge(paradiseEveEdge);
+
+        BaseNode godNode = new ActorNode("God");
         m_TestGraph.AddNode(godNode);
+
+        WeightedEdge godEveEdge = new WeightedEdge(godNode, eveNode);
+        m_TestGraph.AddEdge(godEveEdge);
+
+        WeightedEdge godAdamEdge = new WeightedEdge(godNode, adamNode);
+        m_TestGraph.AddEdge(godAdamEdge);
     }
 
     // Update is called once per frame

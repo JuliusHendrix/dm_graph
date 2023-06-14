@@ -29,7 +29,10 @@ public class TestNodes
 
         LocationNode locationNode = new LocationNode("Test Location Node");
         Assert.Null(locationNode.GetComponent<AlignmentComponent>());
+        Assert.Null(locationNode.GetComponent<NodeComponentBase>());
         Assert.NotNull(locationNode.GetComponent<LocationComponent>());
+
+        Assert.IsTrue(locationNode.HasComponent(typeof(LocationComponent)));
 
         ActorNode actorNode = new ActorNode("Test Actor Node");
         Assert.NotNull(actorNode.GetComponent<AlignmentComponent>());

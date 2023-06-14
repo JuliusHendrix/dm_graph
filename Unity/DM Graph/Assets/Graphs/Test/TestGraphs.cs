@@ -52,4 +52,23 @@ public class TestGraphs
         Assert.IsNull(removedEdge);
         Assert.NotNull(remainingEdge);
     }
+
+    public void TestGraphFilter()
+    {
+        UndirectedGraph undirectedGraph = new UndirectedGraph("Test Undirected Graph");
+
+        BaseNode node1 = new BaseNode("Node 1");
+        BaseNode node2 = new ActorNode("Node 2");
+        BaseNode node3 = new LocationNode("Node 3");
+
+        undirectedGraph.AddNode(node1);
+        undirectedGraph.AddNode(node2);
+        undirectedGraph.AddNode(node3);
+
+        WeightedEdge edge1  = new WeightedEdge(node1, node2);
+        WeightedEdge edge2  = new WeightedEdge(node3, node1);
+
+        // GraphFilter graphFilter = new GraphFilter(undirectedGraph);
+        // graphFilter.AddNodeComponentFilter(typeof(BaseEdge));
+    }
 }

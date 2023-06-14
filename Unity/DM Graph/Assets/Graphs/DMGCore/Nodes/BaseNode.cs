@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 using dm_graph.nodes.components;
 
 namespace dm_graph.nodes
@@ -14,6 +15,26 @@ namespace dm_graph.nodes
         public BaseNode(string name)
         {
             m_Name = name;
+        }
+
+        public bool HasComponent(Type type)
+        {
+            foreach (NodeComponentBase component in m_Components) {
+                if (component.GetType() == type) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public T GetComponent<T>() where T : NodeComponentBase
+        {
+            foreach (NodeComponentBase component in m_Components) {
+                if (component.GetType() == typeof(T)) {
+                    return (T)component;
+                }
+            }
+            return null;
         }
 
         public void SetName(string name)
@@ -34,16 +55,6 @@ namespace dm_graph.nodes
         public string GetNotes()
         {
             return m_Notes;
-        }
-
-        public T GetComponent<T>() where T : NodeComponentBase
-        {
-            foreach (NodeComponentBase component in m_Components) {
-                if (component is T) {
-                    return (T)component;
-                }
-            }
-            return null;
         }
     }
 } // namespace dm_graph

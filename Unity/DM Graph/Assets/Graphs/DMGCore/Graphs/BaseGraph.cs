@@ -136,6 +136,11 @@ namespace dm_graph.graphs
             return m_Nodes;
         }
 
+        public List<BaseEdge> GetEdges()
+        {
+            return m_Edges;
+        }
+
         public abstract bool AddNode(BaseNode node);
         public abstract void RemoveNode(BaseNode node);
         public abstract bool AddEdge(BaseEdge edge);

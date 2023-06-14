@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using dm_graph.nodes;
 using dm_graph.edges.components;
 
@@ -18,6 +19,26 @@ namespace dm_graph.edges
             m_Receiver  = receiver;
         }
 
+        public bool HasComponent(Type type)
+        {
+            foreach (EdgeComponentBase component in m_Components) {
+                if (component.GetType() == type.GetType()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public T GetComponent<T>() where T : EdgeComponentBase
+        {
+            foreach (EdgeComponentBase component in m_Components) {
+                if (component.GetType() == typeof(T)) {
+                    return (T)component;
+                }
+            }
+            return null;
+        }
+
         public void SetNotes(string notes)
         {
             m_Notes = notes;
@@ -31,16 +52,6 @@ namespace dm_graph.edges
         public (BaseNode, BaseNode) GetSenderReceiver()
         {
             return (m_Sender, m_Receiver);
-        }
-
-        public T GetComponent<T>() where T : EdgeComponentBase
-        {
-            foreach (EdgeComponentBase component in m_Components) {
-                if (component is T) {
-                    return (T)component;
-                }
-            }
-            return null;
         }
     }
 }
